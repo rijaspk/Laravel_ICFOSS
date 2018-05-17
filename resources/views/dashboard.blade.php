@@ -10,6 +10,7 @@
 @endpush
 
 @push('script')
+<script src="{{asset('datatables/datatables.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function(){
     $('.deptForm').on('submit', function(ev) {
@@ -21,7 +22,15 @@ $(document).ready(function(){
            dataType:'JSON'
        });
     });
-});
+
+//     $('#Departments').DataTable({
+//               dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+//             "<'row'<'col-sm-12'tr>>" +
+//             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+//       buttons: [ 'excel']
+//     });
+//
+// });
 
 </script>
 @endpush
@@ -77,7 +86,7 @@ $(document).ready(function(){
                 <!-- Modal End-->
                     <div class="panel-body">
                     <div class="row">
-                      <table id="registrations" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
+                      <table id="Departments" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
                         <thead>
                           <tr>
                             <td>Department Name</td>

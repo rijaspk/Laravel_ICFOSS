@@ -17,7 +17,8 @@ class DepartmentHeadController extends Controller
         // $count =DB::table('users')->groupBy('role')->count('role');
             $count =DB::select('SELECT COUNT(role) as cnt ,role from users GROUP BY role');
         //print_r($count);
-        $RAs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation',"RA")->get();
+        //$RAs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation',"RA")->get();
+            $RAs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->get();
 
         $RFs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation',"RF")->get();
         $IOs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation','IO')->get();

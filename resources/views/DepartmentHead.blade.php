@@ -60,7 +60,7 @@
 
 <div class="container">
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
             <div class="panel-heading">Dashboard</div>
             <div class="panel-body">
@@ -98,9 +98,9 @@
 	   </div>
      </div>
 
-     <button type="button" class="btn btn-outline-secondary"  data-toggle="modal" data-target="#exampleModal">
-         ADD USERS
-     </button>
+         <!-- <button type="button" class="btn btn-outline-secondary"  data-toggle="modal" data-target="#exampleModal">
+             ADD USERS
+         </button> -->
      <!-- Modal -->
      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -117,7 +117,7 @@
 
                  <div class="modal-body">
                          <input type="hidden" name="_token" value="{{csrf_token()}}" />
-                         <div class="md-form mb-5">
+                         <div class="md-form mb-4">
                              <label data-error="wrong" data-success="right" for="defaultForm-email">Name</label>
                              <input type="text" id="deptForm-dname" name="name" class="form-control validate">
                          </div>
@@ -129,8 +129,9 @@
                              <label data-error="wrong" data-success="right" for="defaultForm-pass">Date Of Joining</label>
                              <input type="date" id="deptForm-dhname" name="doj" class="form-control validate">
                          </div>
-                         <div class="md-form mb-6">
-                             <label data-error="wrong" data-success="right" for="defaultForm-pass">Designation</label>
+                          </br>
+                         <div class="md-form mb-4">
+                             <label data-error="wrong" data-success="right" for="defaultForm-pass" style='padding-right: 10px'>Designation</label>
                                  <select  name="Designation" class=”col-md-4”  id=”type”  required>
                                      <option value="" selected disabled hidden>Select A Designation</option>
                                      <option value="RA">  Research Assistants  </option>
@@ -138,6 +139,7 @@
                                      <option value="IO">Interns And Others</option>
                                  </select>
                          </div>
+                     </br>
                           <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="defaultForm-pass">Sex</label>
                          <label class="checkbox-inline"><input type="radio" name="Sex" value="M" />Male</label>
@@ -155,46 +157,46 @@
      </div>
      <!-- Modal End-->
      <div class="panel-body">
-     <div class="row">
-       <table id="RATable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
-         <thead>
-           <tr>
-             <td>Name</td>
-             <td>Email</td>
-             <td>Date OF Joining</td>
-              <td>Actions</td>
-           </tr>
-         </thead>
-         <tbody>
-                 @foreach($RAs as $index=>$each)
-               <tr>
-                 <td>
-                     {{$each->Name}}
-                 </td>
-                 <td>
-                      {{$each->Email}}
-                 </td>
-                 <td>
-                      {{$each->Date_Of_Joining}}
-                 </td>
-                 <td>
-                    <input type="button" id="edit_button1" value="Edit" class="edit" onclick="edit_row('1')">
-                    <!-- <input type="button" id="save_button1" value="Save" class="save" onclick="save_row('1')"> -->
-                <!-- </td>
-                    <td> -->
-                        <input type="button" value="Delete" class="delete" onclick="delete_row('1')">
+         <div class="RATable">
+             <table id="RATable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
+                 <thead>
+                     <tr>
+                         <td>Name</td>
+                         <td>Email</td>
+                         <td>Date OF Joining</td>
+                         <td>Actions</td>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     @foreach($RAs as $index=>$each)
+                     <tr>
+                         <td>
+                             {{$each->Name}}
+                         </td>
+                         <td>
+                             {{$each->Email}}
+                         </td>
+                         <td>
+                             {{$each->Date_Of_Joining}}
+                         </td>
+                         <td>
+                             <input type="button" id="edit_button1" value="Edit" class="btn btn-link" onclick="edit_row(this.value)">
+                            <input type="button" value="Delete" class="btn btn-link" onclick="delete_row('1')">
 
-                    </td>
-             </tr>
-             @endforeach
-         </tbody>
-       </table>
+                         </td>
+                     </tr>
+                     @endforeach
+                 </tbody>
+             </table>
+         </div>
+         <div class="RFTable">
        <table id="RFTable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
          <thead>
            <tr>
              <td>Name</td>
              <td>Email</td>
              <td>Date OF Joining</td>
+              <td>Actions</td>
            </tr>
          </thead>
          <tbody>
@@ -209,76 +211,96 @@
                  <td>
                       {{$each->Date_Of_Joining}}
                  </td>
+                 <td>
+                     <input type="button" id="edit_button1" value="Edit" class="btn btn-link" onclick="edit_row(this.value)">
+                    <input type="button" value="Delete" class="btn btn-link" onclick="delete_row('1')">
+
+                 </td>
              </tr>
              @endforeach
          </tbody>
        </table>
-       <table id="IOTable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
-         <thead>
-           <tr>
-             <td>Name</td>
-             <td>Email</td>
-             <td>Date OF Joining</td>
-           </tr>
-         </thead>
-         <tbody>
-                 @foreach($IOs as $index=>$each)
-               <tr>
-                 <td>
-                     {{$each->Name}}
-                 </td>
-                 <td>
-                      {{$each->Email}}
-                 </td>
-                 <td>
-                      {{$each->Date_Of_Joining}}
-                 </td>
-                 <td>
-                    <input type="button" id="edit_button1" value="Edit" class="edit" onclick="edit_row('1')">
-                    <input type="button" id="save_button1" value="Save" class="save" onclick="save_row('1')">
-                <!-- </td>
-                    <td> -->
-                        <input type="button" value="Delete" class="delete" onclick="delete_row('1')">
+   </div>
+   <div class="IOTable">
+ <table id="IOTable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
+   <thead>
+     <tr>
+       <td>Name</td>
+       <td>Email</td>
+       <td>Date OF Joining</td>
+        <td>Actions</td>
+     </tr>
+   </thead>
+   <tbody>
+           @foreach($IOs as $index=>$each)
+         <tr>
+           <td>
+               {{$each->Name}}
+           </td>
+           <td>
+                {{$each->Email}}
+           </td>
+           <td>
+                {{$each->Date_Of_Joining}}
+           </td>
+           <td>
+               <input type="button" id="edit_button1" value="Edit" class="btn btn-link" onclick="edit_row(this.value)">
+              <input type="button" value="Delete" class="btn btn-link" onclick="delete_row('1')">
 
-                    </td>
-
-             </tr>
-             @endforeach
-         </tbody>
-       </table>
+           </td>
+       </tr>
+       @endforeach
+   </tbody>
+ </table>
+</div>
      </div>
- </div>
     </div>
   </div>
  </div>
 </div>
 @endsection
 @push('script')
+<script src="{{asset('datatables/datatables.min.js')}}"></script>
 <script>
 $(document).ready(function(){
-    $('#RATable').hide();
-    $('#RFTable').hide();
-    $('#IOTable').hide();
+    $('.RATable').hide();
+    $('.RFTable').hide();
+    $('.IOTable').hide();
 
+    $('#RATable').DataTable({
+              dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      buttons: [ 'excel']
+    });
 
-        $('#RA').on('click', function(ev) {
-            $('#RATable').toggle('slow');
-            $('#RFTable').hide();
-            $('#IOTable').hide();
-        });
+    $('#RFTable').DataTable({
+      dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      buttons: [ 'excel']
+    });
 
-        $('#RF').on('click', function(ev) {
-            $('#RFTable').toggle('slow');
-            $('#RATable').hide();
-            $('#IOTable').hide();
-        });
+    $('#IOTable').DataTable({
+      dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      buttons: [ 'excel']
+    });
+    });
 
-        $('#IO').on('click', function(ev) {
-            $('#IOTable').toggle('slow');
-            $('#RFTable').hide();
-            $('#RATable').hide();
-        });
-});
+    $('#RA').on('click', function(ev) {
+        $('.RATable').toggle('slow');
+    });
+
+    $('#RF').on('click', function(ev) {
+       $('.RFTable').toggle('slow');
+     });
+
+    $('#IO').on('click', function(ev) {
+        $('.IOTable').toggle('slow');
+    });
+
     $('.deptForm').on('submit', function(ev) {
         var formData=$('.deptForm').serialize();
         alert($formData);
@@ -289,6 +311,11 @@ $(document).ready(function(){
            dataType:'JSON'
        });
     });
+
+ function edit_row(val){
+     alert(val);
+ }
+
 
 
 </script>

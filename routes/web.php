@@ -14,16 +14,18 @@
 Route::get('/', function () {
     return view('welcome');
 });
+// Route::get('/MyProfile', function () {
+//     return view('MyProfile');
+// });
 
 Auth::routes();
-
-// Route::get('/dash', 'DashboardController@index')->middleware('UserRole');
-// Route::post('/dashstore', 'DashboardController@store');
 
 Route::resource('/dash','DashboardController')->middleware('UserRole');
 
 
 Route::resource('/DepartmentHead','DepartmentHeadController');
+
+Route::resource('/MyProfile','ProfileController');
 
 
 Route::get('/unauthorised', function () {
