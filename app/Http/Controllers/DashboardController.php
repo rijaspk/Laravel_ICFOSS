@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use redirect;
 use DB;
+use Session;
 class DashboardController extends Controller
 {
     /**
@@ -45,6 +46,7 @@ class DashboardController extends Controller
         );
         $flag=DB::table('DepartmentsAndHeads')->insert($formData);
             if($flag==1){
+            Session::flash('flash_message', 'Department Created Sucessfully');
             $message="Department successfully created";
            return redirect('/dash')->with('message',$message);
         }
@@ -97,5 +99,8 @@ class DashboardController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function test(){
+
     }
 }

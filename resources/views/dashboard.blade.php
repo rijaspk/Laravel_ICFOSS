@@ -51,6 +51,7 @@ $(document).ready(function(){
                     {!!$message!!}
                     @endif
                   </div>
+
                 </div>
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -85,6 +86,12 @@ $(document).ready(function(){
                 </div>
                 <!-- Modal End-->
                     <div class="panel-body">
+                    @if(Session::has('flash_message'))
+                            <div class="alert alert-success alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                {{ Session::get('flash_message') }}
+                            </div>
+                        @endif
                     <div class="row">
                       <table id="Departments" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
                         <thead>

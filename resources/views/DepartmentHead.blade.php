@@ -69,7 +69,7 @@
 			<div class="icon-section">
 				<i class="fa fa-leanpub" aria-hidden="true"></i><br>
 				<small>Research Assistants</small>
-				<p>3</p>
+				<p>{{$count[1]->cnt}}</p>
 			</div>
 			<div class="detail-section">
 			<div id="RA">More Info </div>
@@ -79,7 +79,7 @@
 			<div class="icon-section">
 				<i class="fa fa-user" aria-hidden="true"></i><br>
 				<small>Research Fellows</small>
-				<p>5</p>
+				<p>{{$count[2]->cnt}}</p>
 			</div>
 			<div class="detail-section">
 				<div id="RF">More Info </div>
@@ -89,7 +89,7 @@
 			<div class="icon-section">
 				<i class="fa fa-users" aria-hidden="true"></i><br>
 				<small>Interns and Others</small>
-				<p>2</p>
+				<p>{{$count[0]->cnt}}</p>
 			</div>
 			<div class="detail-section">
 				<div id="IO">More Info </div>
@@ -97,11 +97,19 @@
 		</div>
 	   </div>
      </div>
+     @if(Session::has('flash_message'))
+             <div class="alert alert-success">
+                 {{ Session::get('flash_message') }}
+             </div>
+         @endif
 
-         <!-- <button type="button" class="btn btn-outline-secondary"  data-toggle="modal" data-target="#exampleModal">
+         <button type="button" class="btn btn-outline-secondary"  data-toggle="modal" data-target="#exampleModal">
              ADD USERS
-         </button> -->
+         </button>
+     </br>
+
      <!-- Modal -->
+
      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
              <div class="modal-content">
@@ -156,8 +164,10 @@
          </div>
      </div>
      <!-- Modal End-->
-     <div class="panel-body">
+     <!-- <div class="panel-body"> -->
          <div class="RATable">
+             <h3 class="text-center" id="exampleModalLabel">Research Assistants</h3>
+         </br>
              <table id="RATable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
                  <thead>
                      <tr>
@@ -177,11 +187,11 @@
                              {{$each->Email}}
                          </td>
                          <td>
-                             {{$each->Date_Of_Joining}}
+                             {{$each->DOJ}}
                          </td>
                          <td>
-                             <input type="button" id="edit_button1" value="Edit" class="btn btn-link" onclick="edit_row(this.value)">
-                            <input type="button" value="Delete" class="btn btn-link" onclick="delete_row('1')">
+                             <button class="btn btn-link open_modal" value="{{$each->Email}}">Edit</button>
+                              <button type="button" value="{{$each->Id}}" onclick="delete_row(this.value)" class="btn btn-link">delete</button>
 
                          </td>
                      </tr>
@@ -190,6 +200,7 @@
              </table>
          </div>
          <div class="RFTable">
+         <h3 class="text-center">Research Fellows</h3>
        <table id="RFTable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
          <thead>
            <tr>
@@ -209,11 +220,11 @@
                       {{$each->Email}}
                  </td>
                  <td>
-                      {{$each->Date_Of_Joining}}
+                      {{$each->DOJ}}
                  </td>
                  <td>
-                     <input type="button" id="edit_button1" value="Edit" class="btn btn-link" onclick="edit_row(this.value)">
-                    <input type="button" value="Delete" class="btn btn-link" onclick="delete_row('1')">
+                     <button class="btn btn-link open_modal" value="{{$each->Email}}">Edit</button>
+                      <button type="button" value="{{$each->Id}}" onclick="delete_row(this.value)" class="btn btn-link">delete</button>
 
                  </td>
              </tr>
@@ -222,6 +233,7 @@
        </table>
    </div>
    <div class="IOTable">
+    <h3 class="text-center" >Interns And Others</h3>
  <table id="IOTable" class="table table-striped table-reponsive table-bordered" width="100%" cellspacing="0">
    <thead>
      <tr>
@@ -241,22 +253,62 @@
                 {{$each->Email}}
            </td>
            <td>
-                {{$each->Date_Of_Joining}}
+                {{$each->DOJ}}
            </td>
            <td>
-               <input type="button" id="edit_button1" value="Edit" class="btn btn-link" onclick="edit_row(this.value)">
-              <input type="button" value="Delete" class="btn btn-link" onclick="delete_row('1')">
-
+               <button class="btn btn-link open_modal" value="{{$each->Email}}">Edit</button>
+                <button type="button" value="{{$each->Id}}" onclick="delete_row(this.value)" class="btn btn-link">delete</button>
            </td>
        </tr>
        @endforeach
    </tbody>
  </table>
 </div>
+     <!-- </div> -->
+     <!-- Edit Row Modal -->
+     <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h4 class="modal-title" id="exampleModalLabel">EDIT </h4>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
+                 </div>
+                 <!-- Modal body -->
+                 <!-- Form -->
+                 <form class="EditForm " name="EditForm" action="{{URL::to('/Updaterow')}}"method="post">
+
+                 <div class="modal-body">
+                         <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                         <div class="md-form mb-4">
+                             <label data-error="wrong" data-success="right" for="defaultForm-email">Name</label>
+                             <input type="text" id="name" name="name" class="form-control validate">
+                         </div>
+                         <div class="md-form mb-4">
+                             <label data-error="wrong" data-success="right" for="defaultForm-pass">Email</label>
+                             <input type="email" id="email" name="email" class="form-control validate">
+                         </div>
+                         <div class="md-form mb-4">
+                             <label data-error="wrong" data-success="right" for="defaultForm-pass">Date Of Joining</label>
+                             <input type="date" id="doj" name="doj" class="form-control validate" >
+                         </div>
+                          </br>
+                     </br>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary" id="modalsavebtn">Save Changes</button>
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                 </div>
+                 </form>
+                  <!-- Form End-->
+             </div>
+         </div>
      </div>
-    </div>
-  </div>
+     <!-- Modal End-->
  </div>
+</div>
+</div>
 </div>
 @endsection
 @push('script')
@@ -268,21 +320,21 @@ $(document).ready(function(){
     $('.IOTable').hide();
 
     $('#RATable').DataTable({
-              dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+              dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
       buttons: [ 'excel']
     });
 
     $('#RFTable').DataTable({
-      dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+      dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
       buttons: [ 'excel']
     });
 
     $('#IOTable').DataTable({
-      dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-3'f>>" +
+      dom:  "<'row'<'col-sm-3'l><'col-sm-3'B><'col-sm-6'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
       buttons: [ 'excel']
@@ -303,7 +355,7 @@ $(document).ready(function(){
 
     $('.deptForm').on('submit', function(ev) {
         var formData=$('.deptForm').serialize();
-        alert($formData);
+        alert(formData);
                $.ajax({
            type:'post',
            url:'{{URL::to("/DepartmentHead")}}',
@@ -312,10 +364,44 @@ $(document).ready(function(){
        });
     });
 
- function edit_row(val){
-     alert(val);
- }
 
+    $('.open_modal').on('click',function(){
+        var currentRow = $(this).closest("tr");
+        var col1 = currentRow.find("td:eq(0)").html();
+        var col2 = currentRow.find("td:eq(1)").html();
+        var col3 = currentRow.find("td:eq(2)").html();
+        var name=col1.trim();
+        var doj=col3.trim();
+          $('#name').val(name);
+          $('#email').val(col2);
+          $('#doj').val(doj);
+          $('#EditModal').modal('show');
+      });
+
+      $('.EditForm').on('submit', function(ev) {
+//          alert("hi");
+          var formData=$('.EditForm').serialize();
+//          alert(formData);
+                 $.ajax({
+             type:'post',
+             url:'{{URL::to("/Updaterow")}}',
+             data:formData,
+             dataType:'JSON'
+         });
+      });
+
+ function delete_row(val){
+    var form_data=new FormData();
+    form_data.append('id',val);
+    form_data.append('_token','{{csrf_token()}}');
+//     alert(val);
+     $.ajax({
+         method:'delete',
+         url:'{{URL::to("/DepartmentHead")}}/'+val,
+        data:'_token={{csrf_token()}}',
+       dataType:'JSON'
+           });
+ }
 
 
 </script>

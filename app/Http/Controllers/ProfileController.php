@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Session;
+use Storage;
 
 class ProfileController extends Controller
 {
@@ -18,10 +19,9 @@ class ProfileController extends Controller
     {
         $userMail=Auth::user()->email;
         //echo $userMail;
-
         $userData=DB::Table('users')->select('name','email','role','password')->where('email',$userMail)->get()->toArray();
-        //echo ($userData);
-        return view('MyProfile')->with('userData',$userData);
+        $addData=DB::Table('Members')->select('LastName','DOJ','Contact_Number')->where('email',$userMail)->get()->toArray();
+        return view('MyProfile',compact('userData','addData'));
     }
 
     /**
@@ -42,33 +42,27 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-            $formData=array(
-            'Name'=>$request->name,
-            'Designation'=>$request->Designation,
-            'Email'=>$request->email,
-            'Date_Of_Joining'=>$request->doj,
-            'Contact_Number'=>$request->Contact_No
-        );
-        $doj=$request->doj;
-        print_r($formData);
-        //$flag=DB::Table('Member')->insert('Date_Of_Joining',$doj);
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        $user = Auth::user();
-        $avatarName = $user->id.'_avatar'.time().'.'.request()->avatar->getClientOriginalExtension();
-        $request->avatar->storeAs('avatars',$avatarName);
-        $user->avatar = $avatarName;
-        $user->save();
-         Session::flash('flash_message', 'User profile Updated');
-                $update_flg=DB::table('Members')
-                            ->where('email', $formData['email'])
-                            ->update([
-                              ' Date_Of_Joining' => $formData['doj'],
-                              'Contact_No' => $formData['Contact_No']
-                            ]);
-        return redirect('/MyProfile');
 
+        //     'Name'=>$request->name,
+        //     'Designation'=>$request->Designation,
+             $email=$request->email;
+             $doj=$request->doj;
+              $lname=$request->lname;
+            $Contact_No=$request->Contact_No;
+                $update_flg=DB::table('Members')
+                            ->where('email', $email)
+                            ->update([
+                                'LastName'=>$lname,
+                              'DOJ' => $doj,
+                              'Contact_Number' => $Contact_No
+                            ]);
+                            if($flag==1){
+                        Session::flash('flash_message', 'Profile Updated Sucessfully');
+                        }else{
+                        Session::flash('flash_message', 'Profile Updateion Failed');
+                        }
+                            return redirect('/MyProfile');
+        // echo $upadte_flg;
     }
 
     /**
@@ -122,5 +116,24 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function saveprofiledata(Request $request)
+    {
+        // $request->validate(['avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048']);
+        // $user = Auth::user();
+        // $avatarName = $user->id.'_avatar'.time().'.'.request()->avatar->getClientOriginalExtension();
+        // $request->avatar->storeAs('avatars',$avatarName);
+        // $user->avatar = $avatarName;
+        // $user->save();
+
+        $user = Auth::user();
+        $file = $request->file('avatar');
+        $extension = $file->getClientOriginalExtension();
+        $avatarName = $user->id.'_avatar'.time().'.'.$extension;
+        $user->avatar = $avatarName;
+        $destinationpath ='app/public/'.$avatarName;
+        $uploaded=Storage::put($destinationpath,file_get_contents($file->getRealPath()));
+        $user->save();
+
     }
 }

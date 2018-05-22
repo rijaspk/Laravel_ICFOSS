@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('/auth/login');
 });
 // Route::get('/MyProfile', function () {
 //     return view('MyProfile');
@@ -20,9 +20,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('/dash','DashboardController')->middleware('UserRole');
+Route::resource('/dash','DashboardController');
 
-
+Route::post('/saveprofiledata','ProfileController@saveprofiledata');
+Route::post('/Updaterow','DepartmentHeadController@Updaterow');
 Route::resource('/DepartmentHead','DepartmentHeadController');
 
 Route::resource('/MyProfile','ProfileController');

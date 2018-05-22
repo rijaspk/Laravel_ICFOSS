@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
-
+use Session;
+use Illuminate\Support\Facades\Auth;
 class DepartmentHeadController extends Controller
 {
     /**
@@ -14,15 +15,10 @@ class DepartmentHeadController extends Controller
      */
     public function index()
     {
-        // $count =DB::table('users')->groupBy('role')->count('role');
-            $count =DB::select('SELECT COUNT(role) as cnt ,role from users GROUP BY role');
-        //print_r($count);
-        //$RAs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation',"RA")->get();
-            $RAs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->get();
-
-        $RFs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation',"RF")->get();
-        $IOs=DB::table('Members')->select('Name','Email', 'Date_Of_Joining')->where('Designation','IO')->get();
-        //print_r($IOs);
+        $count =DB::select('SELECT COUNT(Designation) as cnt ,Designation from Members GROUP BY Designation');
+        $RAs=DB::table('Members')->select('Id','Name','Email', 'DOJ')->where('Designation',"RA")->where('DeleteFlag','0')->get();
+        $RFs=DB::table('Members')->select('Id','Name','Email', 'DOJ')->where('Designation',"RF")->where('DeleteFlag','0')->get();
+        $IOs=DB::table('Members')->select('Id','Name','Email', 'DOJ')->where('Designation','IO')->where('DeleteFlag','0')->get();
         return view('DepartmentHead',compact('RAs','RFs','IOs','count'));
     }
 
@@ -49,7 +45,7 @@ class DepartmentHeadController extends Controller
             'Designation'=>$request->Designation,
             'Email'=>$request->email,
             'Sex'=>$request->Sex,
-            'Date_Of_Joining'=>$request->doj
+            'DOJ'=>$request->doj
         );
         $desg=$request->Designation;
         //echo $desg;
@@ -100,6 +96,33 @@ class DepartmentHeadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $update_flg=DB::table('Members')
+                    ->where('Id', $id)
+                    ->update([
+                       'DeleteFlag'=>'1'
+                    ]);
+                    return redirect('/DepartmentHead');
+       }
+
+
+    public function Updaterow(Request $request)
+    {
+            $Name=$request->name;
+            $Email=$request->email;
+            $DOJ=$request->doj;
+        $update_flg=DB::table('Members')
+                    ->where('email', $Email)
+                    ->update([
+                      'Name'=>$Name,
+                      'DOJ' => $DOJ,
+                      'email'=>$Email
+                    ]);
+                    if($update_flg==1){
+                Session::flash('flash_message', 'Profile Updated Sucessfully');
+                }else{
+                Session::flash('flash_message', 'Profile Updation Failed');
+                }
+                    return redirect('/DepartmentHead');
     }
+
 }
