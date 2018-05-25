@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use redirect;
+     use AuthenticatesUsers;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 //use Illuminate\Foundation\Auth\Auth;
@@ -16,26 +17,22 @@ class RedirectIfAuthenticated
      * @param  string|null  $guard
      * @return mixed
      */
+
     public function handle($request, Closure $next, $guard = null)
     {
+
         if (Auth::guard($guard)->check()) {
+            if (Auth::user()->role == 'Admin')
+        {
             return redirect('/dash');
         }
-        return $next($request);
-    }
-    // public function redirectTo()
-    // {
-    //     $user=Auth::user();
-    //     if($user=="member"){
-    //         return '/DepartmentHead';
-    //     }else {
-    //         return '/dash';
-    //     }
-    // }
+        else
+        {
+            return redirect('/DepartmentHead');
+        }
+     }
+       return $next($request);
 
+}
 
-    // public function redirectTo()
-    // {
-    //     return '/path';
-    // }
 }

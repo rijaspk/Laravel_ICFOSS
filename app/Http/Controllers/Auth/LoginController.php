@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dash';
+    protected $redirectTo = '/userRole';
 
     /**
     *custom redirect function to over-ride "$redirectTo"

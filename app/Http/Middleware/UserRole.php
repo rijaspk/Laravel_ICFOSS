@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Closure;
 use Redirect;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 class UserRole
 {
     /**
@@ -14,16 +14,17 @@ class UserRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next )
     {
         //$role =Auth::user()->role;
 
-        if(Auth::check() && Auth::user()->role=='Admin')
-            {
-                    return $next($request);
-            }
-        else{
-        return redirect('/');   
+        if (Auth::user()->role == 'Admin')
+    {
+        return redirect('/dash');
     }
-}
+    else
+    {
+        return redirect('/DepartmentHead');
+    }
+    }
 }

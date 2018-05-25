@@ -15,6 +15,8 @@ class DepartmentHeadController extends Controller
      */
     public function index()
     {
+        $user=Auth::user()->name;
+        //echo $user;
         $count =DB::select('SELECT COUNT(Designation) as cnt ,Designation from Members GROUP BY Designation');
         $RAs=DB::table('Members')->select('Id','Name','Email', 'DOJ')->where('Designation',"RA")->where('DeleteFlag','0')->get();
         $RFs=DB::table('Members')->select('Id','Name','Email', 'DOJ')->where('Designation',"RF")->where('DeleteFlag','0')->get();
@@ -40,16 +42,22 @@ class DepartmentHeadController extends Controller
      */
     public function store(Request $request)
     {
+        $user=Auth::user()->name;
+        //echo $user;
+        $department=DB::table('DepartmentsAndHeads')
+        ->where('Department_Head',$user)
+        ->value('Department_Name');
         $formData=array(
             'Name'=>$request->name,
             'Designation'=>$request->Designation,
             'Email'=>$request->email,
             'Sex'=>$request->Sex,
-            'DOJ'=>$request->doj
+            'DOJ'=>$request->doj,
+            'Department'=>$department
         );
-        $desg=$request->Designation;
+        //$desg=$request->Designation;
         //echo $desg;
-        //print_r($fromData);
+        print_r($formData);
         $flag=DB::table('Members')->insert($formData);
         return redirect('/DepartmentHead');
     }

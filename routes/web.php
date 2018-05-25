@@ -32,5 +32,5 @@ Route::resource('/MyProfile','ProfileController');
 Route::get('/unauthorised', function () {
     return view('unauthorised');
 });
-
+Route::get('/userRole', 'userRoleContoller@overview');
 Route::get('/home', 'HomeController@index')->name('home');
